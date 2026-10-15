@@ -85,7 +85,7 @@ rem
 
 pushd angle
 
-call gn gen out/%ARCH% --args="target_cpu=""%ARCH%"" angle_build_all=false is_debug=false angle_has_frame_capture=false angle_enable_gl=false angle_enable_vulkan=false angle_enable_wgpu=false angle_enable_d3d9=false angle_enable_null=false use_siso=false" || exit /b 1
+call gn gen out/%ARCH% --args="target_cpu=""%ARCH%"" angle_build_all=false is_debug=false angle_has_frame_capture=false angle_enable_gl=false angle_enable_vulkan=true angle_enable_wgpu=false angle_enable_d3d9=false angle_enable_null=false use_siso=false" || exit /b 1
 "C:\Program Files\Git\usr\bin\sed.exe" -i.bak -e "s/\/MD/\/MT/" build\config\win\BUILD.gn || exit /b 1
 
 set CL=/Z7
@@ -106,18 +106,29 @@ mkdir angle-%ARCH%\include 1>nul
 
 echo %ANGLE_COMMIT% > angle-%ARCH%\commit.txt
 
+echo "HERE"
+ls
+
 copy /y angle\out\%ARCH%\d3dcompiler_47.dll          angle-%ARCH%\bin                         1>nul 2>nul
 copy /y angle\out\%ARCH%\libEGL.dll                  angle-%ARCH%\bin                         1>nul 2>nul
 copy /y angle\out\%ARCH%\libGLESv1_CM.dll            angle-%ARCH%\bin                         1>nul 2>nul
 copy /y angle\out\%ARCH%\libGLESv2.dll               angle-%ARCH%\bin                         1>nul 2>nul
+copy /y angle\out\%ARCH%\vk_swiftshader.dll          angle-%ARCH%\bin                         1>nul 2>nul
+copy /y angle\out\%ARCH%\vk_swiftshader_icd.json     angle-%ARCH%\bin                         1>nul 2>nul
+copy /y angle\out\%ARCH%\vulkan-1.dll                angle-%ARCH%\bin                         1>nul 2>nul
 
-pdbcopy.exe angle\out\%ARCH%\libEGL.dll.pdb          angle-%ARCH%\bin\libEGL.dll.pdb       -p 1>nul 2>nul
-pdbcopy.exe angle\out\%ARCH%\libGLESv1_CM.dll.pdb    angle-%ARCH%\bin\libGLESv1_CM.dll.pdb -p 1>nul 2>nul
-pdbcopy.exe angle\out\%ARCH%\libGLESv2.dll.pdb       angle-%ARCH%\bin\libGLESv2.dll.pdb    -p 1>nul 2>nul
+pdbcopy.exe angle\out\%ARCH%\libEGL.dll.pdb          angle-%ARCH%\bin\libEGL.dll.pdb         -p 1>nul 2>nul
+pdbcopy.exe angle\out\%ARCH%\libGLESv1_CM.dll.pdb    angle-%ARCH%\bin\libGLESv1_CM.dll.pdb   -p 1>nul 2>nul
+pdbcopy.exe angle\out\%ARCH%\libGLESv2.dll.pdb       angle-%ARCH%\bin\libGLESv2.dll.pdb      -p 1>nul 2>nul
+pdbcopy.exe angle\out\%ARCH%\vk_swiftshader.dll.pdb  angle-%ARCH%\bin\vk_swiftshader.dll.pdb -p 1>nul 2>nul
+pdbcopy.exe angle\out\%ARCH%\vulkan-1.dll.pdb        angle-%ARCH%\bin\vulkan-1.dll.pdb       -p 1>nul 2>nul
+
 
 copy /y angle\out\%ARCH%\libEGL.dll.lib              angle-%ARCH%\lib                         1>nul 2>nul
 copy /y angle\out\%ARCH%\libGLESv1_CM.dll.lib        angle-%ARCH%\lib                         1>nul 2>nul
 copy /y angle\out\%ARCH%\libGLESv2.dll.lib           angle-%ARCH%\lib                         1>nul 2>nul
+copy /y angle\out\%ARCH%\vk_swiftshader.dll.lib      angle-%ARCH%\lib                         1>nul 2>nul
+copy /y angle\out\%ARCH%\vulkan-1.dll.lib            angle-%ARCH%\lib                         1>nul 2>nul
 
 xcopy /D /S /I /Q /Y angle\include\KHR               angle-%ARCH%\include\KHR                 1>nul 2>nul
 xcopy /D /S /I /Q /Y angle\include\EGL               angle-%ARCH%\include\EGL                 1>nul 2>nul
