@@ -66,7 +66,7 @@ jobs:
             -Uri "https://aka.ms/vs/18/release/vs_enterprise.exe" `
             -OutFile $bootstrapper
 
-          & $bootstrapper `
+          $bootstrapper `
             --layout $layoutRoot `
             --add Microsoft.VisualStudio.Workload.NativeDesktop `
             --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
