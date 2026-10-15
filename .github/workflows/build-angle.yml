@@ -41,58 +41,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Cache Visual Studio offline layout
-        id: vs-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            C:\vs-layout
-          key: ${{ runner.os }}-vs-layout-${{ runner.arch }}-2025-10
-          restore-keys: |
-            ${{ runner.os }}-vs-layout-${{ runner.arch }}-
-
-      - name: Bootstrap VS offline layout
-        if: steps.vs-cache.outputs.cache-hit != 'true'
-        shell: powershell
+        
+      - name: Install Windows SDK v10.0.28000
+        shell: cmd
         run: |
-          $ErrorActionPreference = "Stop"
-
-          $layoutRoot = "C:\vs-layout"
-          New-Item -ItemType Directory -Force -Path $layoutRoot | Out-Null
-
-          $bootstrapper = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe"
-
-          & $bootstrapper `
-            --layout $layoutRoot `
-            --add Microsoft.VisualStudio.Workload.NativeDesktop `
-            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-            --add Microsoft.VisualStudio.Component.Windows10SDK.10.0.28000 `
-            --includeRecommended `
-            --lang en-US `
-            --quiet `
-            --wait `
-            --norestart
-
-      - name: Install Windows SDK v10.0.28000 from cached layout
-        shell: powershell
-        run: |
-          $ErrorActionPreference = "Stop"
-
-          $vsInstallPath = "C:\Program Files\Microsoft Visual Studio\18\Enterprise"
-          $layoutExe = "C:\vs-layout\vs_enterprise.exe"
-
-          if (-not (Test-Path $layoutExe)) {
-            throw "Expected cached VS layout bootstrapper at $layoutExe"
-          }
-
-          & $layoutExe modify `
-            --installPath $vsInstallPath `
-            --add Microsoft.VisualStudio.Component.Windows10SDK.10.0.28000 `
-            --quiet `
-            --wait `
-            --norestart `
-            --nocache
+          "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\18\Enterprise" --quiet --force --norestart --add Microsoft.VisualStudio.Component.Windows11SDK.28000
 
       - name: Run Build Script
         id: build
