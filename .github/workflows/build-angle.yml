@@ -61,7 +61,7 @@ jobs:
           $layoutRoot = "C:\vs-layout"
           New-Item -ItemType Directory -Force -Path $layoutRoot | Out-Null
 
-          $bootstrapper = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exee"
+          $bootstrapper = "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe"
 
           & $bootstrapper `
             --layout $layoutRoot `
